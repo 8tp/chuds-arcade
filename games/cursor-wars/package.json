@@ -1,0 +1,23 @@
+{
+  "name": "@chuds/game-cursor-wars",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manifest": "./src/manifest.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "biome check src"
+  },
+  "dependencies": {
+    "@chuds/arcade-sdk": "workspace:*",
+    "@chuds/deterministic-rng": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}
