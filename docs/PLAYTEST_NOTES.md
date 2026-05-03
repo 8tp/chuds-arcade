@@ -6,9 +6,11 @@ Findings from QA agents that simulate real player sessions. Each game keeps its 
 
 ### Findings (50–100 seeds, three player archetypes)
 
-- **Difficulty curve** is monotonic but room 1 is the steepest jump (avg correct count goes 2.96 → 3.46 → 3.64 → … → 5.00 across rooms 1–10).
+- **Difficulty curve** is monotonic after room-1 restriction (avg correct count goes 3.03 → 3.46 → 3.64 → … → 5.00 across rooms 1–10).
+- **Opening room templates** are now restricted to difficulty-1 only (`select-living`, `select-skeletons`, `select-objects`).
 - **Score range:** "Perfect" floor (10,000) never overlaps "Bad" ceiling (–2,920). Skill correctly dominates outcome.
 - **Pre-rebalance:** "Average" archetype died on room 1 in 90% of 50 runs at HP=3. Zero runs reached the final boss.
+- **Post-polish pacing:** "Average" archetype reaches the mini-boss in 32/50 runs, reaches the final boss in 6/50 runs, and wins 3/50 runs (median deepest room 5).
 - **Combo:** Perfect always hits maxCombo=10. Average median 0, max 1.
 - **Determinism** confirmed: 50 seeds reproduced bit-identical metrics across two executions.
 
@@ -23,31 +25,32 @@ Findings from QA agents that simulate real player sessions. Each game keeps its 
 ### Tuning applied
 
 - `STARTING_HEALTH: 3 → 5`. Average archetype now reaches 3–4 rooms before dying instead of dying on room 1.
+- Room 1 now draws only difficulty-1 templates.
+- Selection validation now accepts a small non-perfect human-pass tolerance: early rooms allow up to 3 tile errors, later regular rooms allow 2, and boss rooms allow 1. Decoy mistakes on accepted imperfect clears still count against metrics and score.
 
 ### Open questions / future tuning
 
-- Restrict room 1 to difficulty-1 templates only (currently allows up to difficulty-2).
 - Cap "select-all" exploit by capping mistake-only HP loss vs. full-mistake count.
 
 ## One Button Samurai
 
 ### Findings (5 strategies × 5 bots × 50 seeds)
 
-Pre-rebalance win rates (% per round):
+Post-polish win rates (% per round, 5 strategies × 5 bots × 50 seeds):
 
 | Strategy | Bamboo | Iron Monk | Red Crane | Drunk Ronin | Mirror Ghost |
 |---|---:|---:|---:|---:|---:|
 | Always feint (100ms) | 0 | 0 | 0 | 21.6 | 0 |
-| Always strike at peak (380ms) | 0 | 0 | 0 | 36.4 | 0 |
-| Always guard (1000ms) | 37.6 | 20.0 | **100.0** | 60.4 | 20.0 |
-| Reactive | 36.4 | 24.4 | **100.0** | 73.2 | 50.0 |
+| Always strike at peak (380ms) | 0 | 15.6 | 0 | 28.4 | 17.2 |
+| Always guard (1000ms) | 37.6 | 13.6 | 88.0 | 52.0 | 14.8 |
+| Reactive | 36.4 | 28.4 | 86.4 | 68.8 | 64.4 |
 | Hesitant (1500ms) | 0 | 0 | 0 | 0 | 0 |
 
 Score distribution (100 seeds, 5 rounds each):
 
 | Strategy | min | median | max |
 |---|---:|---:|---:|
-| hold-100 | –780 | –480 | 1,020 |
+| hold-100 | –930 | –630 | 870 |
 | hold-380 | –236 | –236 | 1,264 |
 | hold-1000 | 490 | **2,090** | 5,290 |
 | hold-1500 | –1,960 | –1,960 | –1,960 |
@@ -61,6 +64,7 @@ Score distribution (100 seeds, 5 rounds each):
 | MED | Red Crane was a free win for guarders. | 12% counter-guard added. |
 | MED | Mirror Ghost never feinted. | 15% feint chance, otherwise still mirrors. |
 | LOW | Drunk Ronin's 22% danger rate made him too easy. | Dropped to 10%. |
+| LOW | Guard had a very wide safe tail through 1400ms. | Guard now ends at 1100ms; bot guard ranges were clamped to match. |
 
 ### Verified working
 
@@ -71,7 +75,7 @@ Score distribution (100 seeds, 5 rounds each):
 
 ### Open questions / future tuning
 
-- Tighten guard window from `[651, 1400]` to `[651, 1100]` so 1000ms isn't the safest hit-zone.
+- Guard-at-1000 remains the strongest static score strategy; consider score tuning or bot mix changes if it still feels dominant in manual play.
 - Add a noisy-human player model (release ± 30ms jitter) to validate that the tightening doesn't punish skilled players unfairly.
 - Re-run the strategy matrix after the bot rebalance to confirm guard-dominance is actually broken.
 

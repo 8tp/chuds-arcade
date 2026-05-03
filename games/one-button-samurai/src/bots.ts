@@ -36,7 +36,7 @@ export const IRON_MONK: BotArchetype = {
     // Playtest: monk's pure-guard distribution made strike-at-peak useless. Add 15% feint.
     const r = rng();
     if (r < 0.15) return mid(rng, 60, 130); // feint bait
-    if (r < 0.85) return mid(rng, 720, 1300); // guard
+    if (r < 0.85) return mid(rng, 720, 1100); // guard
     return mid(rng, 200, 500); // mid-strike
   },
 };
@@ -62,7 +62,7 @@ export const DRUNK_RONIN: BotArchetype = {
     const r = rng();
     if (r < 0.22) return mid(rng, 60, 130); // feint
     if (r < 0.6) return mid(rng, 200, 600); // strike
-    if (r < 0.9) return mid(rng, 700, 1300); // guard
+    if (r < 0.9) return mid(rng, 700, 1100); // guard
     return mid(rng, 1500, 2200); // overhold (danger)
   },
 };

@@ -20,13 +20,19 @@ export type Validation = {
   missed: number;
 };
 
-export function validateSelection(picked: string[], correctIds: string[]): Validation {
+export function validateSelection(
+  picked: string[],
+  correctIds: string[],
+  maxErrors = 2,
+): Validation {
   const expect = new Set(correctIds);
   const got = new Set(picked);
   let mistakes = 0;
   for (const id of got) if (!expect.has(id)) mistakes += 1;
   let missed = 0;
   for (const id of expect) if (!got.has(id)) missed += 1;
-  const correct = mistakes === 0 && missed === 0;
-  return { correct, perfect: correct, mistakes, missed };
+  const errorCount = mistakes + missed;
+  const perfect = errorCount === 0;
+  const correct = errorCount <= maxErrors;
+  return { correct, perfect, mistakes, missed };
 }

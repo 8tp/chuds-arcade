@@ -4,7 +4,7 @@
 export const TIMING = {
   feintMaxMs: 140,
   strikeMaxMs: 650,
-  guardMaxMs: 1400,
+  guardMaxMs: 1100,
   // Anything past guardMax is danger / nerve break.
 } as const;
 

@@ -237,13 +237,7 @@ describe("playtest: health pacing for Average archetype", () => {
     // eslint-disable-next-line no-console
     console.log("[playtest] deepest-room histogram:", histo);
 
-    // FINDING: at the current 80/10/10 model the average player almost never
-    // makes it past room 1, because every Average submission has an expected
-    // ~0.8 mistakes per puzzle (10% * ~12 decoys) AND ~0.8 misses per puzzle
-    // (20% * ~4 correct). With STARTING_HEALTH=3 the run dies fast.
-    // We assert only that *some* runs make it past room 1 so the test stays
-    // green if pacing is later softened.
-    expect(reachedRooms.some((r) => r >= 1)).toBe(true);
+    expect(reachedMiniBoss / N).toBeGreaterThan(0.5);
     expect(reachedFinal / N).toBeLessThan(0.2); // documents current brutality
   });
 });
@@ -372,7 +366,7 @@ describe("playtest: time-limit sanity", () => {
 
 describe("playtest: STARTING_HEALTH sanity vs. archetype model", () => {
   it("STARTING_HEALTH constant matches the post-rebalance value", () => {
-    // Bumped from 3 → 5 after playtest showed Average archetype died on room 1 in 90% of runs.
+    // Bumped from 3 after playtest showed Average archetype died on room 1 too often.
     expect(STARTING_HEALTH).toBe(5);
     expect(TEMPLATES.find((t) => t.id === "select-undead-or-magical")).toBeTruthy();
   });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DUNGEON_LENGTH, FINAL_BOSS_ROOM, MINI_BOSS_ROOM, TILE_GRID } from "../constants";
 import { generateDungeon } from "../dungeon";
+import { TEMPLATES } from "../templates";
 
 describe("generateDungeon", () => {
   const seed = "daily:captcha-dungeon:daily-dungeon:2026-05-03:captcha-rules-v1:season-0";
@@ -33,6 +34,17 @@ describe("generateDungeon", () => {
     for (const room of d.rooms) {
       expect(room.puzzle.tiles.length).toBe(TILE_GRID.rows * TILE_GRID.cols);
       expect(room.puzzle.correctTileIds.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("limits the opening room to difficulty-1 templates", () => {
+    const templateDifficulties = new Map(
+      TEMPLATES.map((template) => [template.id, template.difficulty]),
+    );
+    for (let i = 0; i < 100; i += 1) {
+      const dungeon = generateDungeon(`${seed}:opening-check:${i}`);
+      const firstRoom = dungeon.rooms[0]!;
+      expect(templateDifficulties.get(firstRoom.templateId)).toBe(1);
     }
   });
 });

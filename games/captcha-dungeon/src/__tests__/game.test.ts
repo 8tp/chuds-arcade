@@ -47,4 +47,20 @@ describe("CaptchaDungeon", () => {
     g.submit();
     expect(g.snapshot().combo).toBe(0);
   });
+
+  it("clears an imperfect one-mistake room without spending health", () => {
+    const g = new CaptchaDungeon({ seed: SEED, now: () => 0 });
+    const room = g.currentRoom()!;
+    for (const id of room.puzzle.correctTileIds) g.toggleTile(id);
+    const decoy = room.puzzle.tiles.find((t) => !room.puzzle.correctTileIds.includes(t.id))!;
+    g.toggleTile(decoy.id);
+
+    const startHealth = g.snapshot().health;
+    const result = g.submit();
+
+    expect(result).toEqual({ cleared: true, perfect: false });
+    expect(g.snapshot().roomIndex).toBe(1);
+    expect(g.snapshot().health).toBe(startHealth);
+    expect(g.metrics().mistakes).toBe(1);
+  });
 });

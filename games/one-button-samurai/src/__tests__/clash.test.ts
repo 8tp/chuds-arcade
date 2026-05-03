@@ -11,6 +11,7 @@ describe("holdToAction", () => {
     expect(holdToAction(TIMING.strikeMaxMs + 1)).toBe("guard");
     expect(holdToAction(TIMING.guardMaxMs)).toBe("guard");
     expect(holdToAction(TIMING.guardMaxMs + 1)).toBe("danger");
+    expect(holdToAction(1200)).toBe("danger");
     expect(holdToAction(null)).toBe("danger");
   });
 });

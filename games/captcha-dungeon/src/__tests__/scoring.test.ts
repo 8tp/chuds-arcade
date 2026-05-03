@@ -9,16 +9,31 @@ describe("validateSelection", () => {
     expect(v.mistakes).toBe(0);
     expect(v.missed).toBe(0);
   });
-  it("counts mistakes and misses separately", () => {
+  it("accepts a two-error human pass without marking it perfect", () => {
     const v = validateSelection(["a", "x"], ["a", "b"]);
-    expect(v.correct).toBe(false);
+    expect(v.correct).toBe(true);
+    expect(v.perfect).toBe(false);
     expect(v.mistakes).toBe(1);
     expect(v.missed).toBe(1);
   });
-  it("treats subsets as missed", () => {
+  it("accepts a one-error human pass without marking it perfect", () => {
     const v = validateSelection(["a"], ["a", "b"]);
+    expect(v.correct).toBe(true);
+    expect(v.perfect).toBe(false);
     expect(v.mistakes).toBe(0);
     expect(v.missed).toBe(1);
+  });
+  it("rejects larger errors", () => {
+    const v = validateSelection(["x", "y"], ["a", "b"]);
+    expect(v.correct).toBe(false);
+    expect(v.mistakes).toBe(2);
+    expect(v.missed).toBe(2);
+  });
+  it("allows callers to tune the error tolerance", () => {
+    const picked = ["a", "x", "y"];
+    const correct = ["a", "b", "c"];
+    expect(validateSelection(picked, correct, 4).correct).toBe(true);
+    expect(validateSelection(picked, correct, 3).correct).toBe(false);
   });
 });
 

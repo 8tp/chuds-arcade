@@ -1,6 +1,11 @@
 // Pure orchestrator. No DOM here — the renderer pulls a snapshot.
 
-import { PERFECT_ROOM_HUMANITY, ROOM_CLEAR_HUMANITY, STARTING_HEALTH } from "./constants";
+import {
+  MINI_BOSS_ROOM,
+  PERFECT_ROOM_HUMANITY,
+  ROOM_CLEAR_HUMANITY,
+  STARTING_HEALTH,
+} from "./constants";
 import { generateDungeon } from "./dungeon";
 import { computeScore, validateSelection } from "./scoring";
 import type { Dungeon, Room, RunMetrics, SelectPuzzleInstance } from "./types";
@@ -83,10 +88,12 @@ export class CaptchaDungeon {
   submit(): { cleared: boolean; perfect: boolean } {
     const room = this.currentRoom();
     if (this.status !== "playing" || !room) return { cleared: false, perfect: false };
-    const v = validateSelection(Array.from(this.selected), room.puzzle.correctTileIds);
+    const tolerance = room.isBoss ? 1 : room.index < MINI_BOSS_ROOM ? 3 : 2;
+    const v = validateSelection(Array.from(this.selected), room.puzzle.correctTileIds, tolerance);
     this.lastResult = v;
 
     if (v.correct) {
+      this.mistakes += v.mistakes;
       this.roomsCleared += 1;
       this.combo += 1;
       this.maxCombo = Math.max(this.maxCombo, this.combo);

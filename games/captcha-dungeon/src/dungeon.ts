@@ -16,7 +16,8 @@ export function generateDungeon(seed: string): Dungeon {
   for (let i = 1; i <= DUNGEON_LENGTH; i++) {
     const isBoss = i === MINI_BOSS_ROOM || i === FINAL_BOSS_ROOM;
     const difficulty = Math.min(5, 1 + Math.floor(i / 2));
-    const template = pickTemplate(rng, difficulty, isBoss);
+    const maxTemplateDifficulty = i === 1 ? 1 : difficulty + 1;
+    const template = pickTemplate(rng, difficulty, isBoss, maxTemplateDifficulty);
     const puzzle = template.generate(rng, difficulty);
     puzzle.timeLimitMs = isBoss ? BOSS_TIME_LIMIT_MS : ROOM_TIME_LIMIT_MS;
     rooms.push({

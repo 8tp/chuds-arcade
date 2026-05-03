@@ -191,8 +191,13 @@ export const TEMPLATES: PuzzleTemplate[] = [
   },
 ];
 
-export function pickTemplate(rng: RNG, difficulty: number, isBoss: boolean): PuzzleTemplate {
+export function pickTemplate(
+  rng: RNG,
+  difficulty: number,
+  isBoss: boolean,
+  maxTemplateDifficulty = difficulty + 1,
+): PuzzleTemplate {
   if (isBoss) return TEMPLATES.find((t) => t.id === "select-undead-or-magical")!;
-  const eligible = TEMPLATES.filter((t) => t.difficulty <= difficulty + 1);
+  const eligible = TEMPLATES.filter((t) => t.difficulty <= maxTemplateDifficulty);
   return pick(rng, eligible.length ? eligible : TEMPLATES);
 }
