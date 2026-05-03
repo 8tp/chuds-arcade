@@ -7,31 +7,39 @@ import type { Room } from "./types";
 const STYLE_ID = "captcha-dungeon-style";
 
 const STYLE = `
-.cdg-root { display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; font-family: var(--font-sans, system-ui); color: var(--color-fg, #090909); }
-.cdg-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); }
+.cdg-root { width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 0.75rem; padding: 1rem; font-family: var(--font-sans, system-ui); color: var(--color-fg, #090909); }
+.cdg-bar { min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); }
 .cdg-stat { padding: 0.45rem 0.7rem; border-right: 1px solid var(--color-border, #151515); display: flex; flex-direction: column; gap: 0.15rem; }
 .cdg-stat:last-child { border-right: none; }
 .cdg-stat .lbl { font-family: var(--font-mono, monospace); font-size: 0.6rem; text-transform: uppercase; color: var(--color-fg-muted, #565656); }
 .cdg-stat .val { font-family: var(--font-display, "Space Grotesk"), system-ui; font-weight: 900; font-size: 1.2rem; line-height: 1; }
 .cdg-prompt { font-family: var(--font-display, "Space Grotesk"); font-weight: 900; font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1; margin: 0.35rem 0; }
 .cdg-sub { font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--color-fg-muted, #565656); }
-.cdg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-.cdg-tile { position: relative; aspect-ratio: 1 / 1; border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); display: flex; align-items: end; justify-content: flex-start; padding: 0.6rem; font-family: var(--font-mono, monospace); font-size: 0.75rem; cursor: pointer; user-select: none; transition: transform 120ms; }
+.cdg-grid { min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.cdg-tile { min-width: 0; position: relative; aspect-ratio: 1 / 1; border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); display: flex; align-items: end; justify-content: flex-start; padding: 0.6rem; font-family: var(--font-mono, monospace); font-size: 0.75rem; line-height: 1.1; overflow-wrap: anywhere; cursor: pointer; user-select: none; transition: transform 120ms; }
 .cdg-tile.is-selected { background: var(--color-fg, #090909); color: var(--color-panel, #fffdf7); }
 .cdg-tile.is-focus { outline: 2px solid var(--color-fg, #090909); outline-offset: 2px; }
 .cdg-tile:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--color-fg, #090909); }
 .cdg-tile .check { position: absolute; top: 0.35rem; right: 0.5rem; font-family: var(--font-display, system-ui); font-weight: 900; }
 .cdg-tile.is-selected .check::before { content: "✓"; }
-.cdg-actions { display: flex; gap: 0.5rem; }
+.cdg-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .cdg-btn { font-family: var(--font-mono, monospace); font-size: 0.75rem; text-transform: uppercase; padding: 0.55rem 0.85rem; border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); cursor: pointer; }
 .cdg-btn-primary { background: var(--color-fg, #090909); color: var(--color-panel, #fffdf7); }
-.cdg-progress { display: flex; gap: 0.25rem; align-items: center; margin-top: 0.5rem; font-family: var(--font-mono, monospace); font-size: 0.65rem; }
+.cdg-progress { display: flex; flex-wrap: wrap; gap: 0.25rem; align-items: center; margin-top: 0.5rem; font-family: var(--font-mono, monospace); font-size: 0.65rem; }
 .cdg-progress .step { width: 18px; height: 18px; border: 1px solid var(--color-border, #151515); display: grid; place-items: center; font-size: 9px; }
 .cdg-progress .step.boss { background: var(--color-fg, #090909); color: var(--color-panel, #fffdf7); }
 .cdg-progress .step.done { background: var(--color-fg, #090909); color: var(--color-panel, #fffdf7); }
 .cdg-end { text-align: center; padding: 1rem; }
 .cdg-end h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 5vw, 3.5rem); margin: 0; }
 .cdg-end p { font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-fg-muted, #565656); }
+@media (max-width: 420px) {
+  .cdg-root { padding: 0.65rem; }
+  .cdg-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cdg-stat { padding: 0.4rem 0.5rem; }
+  .cdg-grid { gap: 0.3rem; }
+  .cdg-tile { padding: 0.42rem; font-size: 0.64rem; }
+  .cdg-btn { min-height: 40px; }
+}
 `;
 
 export type RenderHandlers = {
@@ -101,6 +109,7 @@ export function render(
       <div class="cdg-bar">
         ${statCell("// room", `${room.index}/${snap.totalRooms}${room.isBoss ? " · BOSS" : ""}`)}
         ${statCell("// hearts", "♥".repeat(snap.health) || "—")}
+        ${statCell("// timer", `${Math.ceil(snap.roomRemainingMs / 1000)}s`)}
         ${statCell("// humanity", snap.humanity.toString())}
         ${statCell("// combo", snap.combo.toString())}
         ${statCell("// score", snap.score.toLocaleString())}

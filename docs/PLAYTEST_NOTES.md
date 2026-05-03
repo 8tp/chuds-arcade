@@ -27,6 +27,7 @@ Findings from QA agents that simulate real player sessions. Each game keeps its 
 - `STARTING_HEALTH: 3 → 5`. Average archetype now reaches 3–4 rooms before dying instead of dying on room 1.
 - Room 1 now draws only difficulty-1 templates.
 - Selection validation now accepts a small non-perfect human-pass tolerance: early rooms allow up to 3 tile errors, later regular rooms allow 2, and boss rooms allow 1. Decoy mistakes on accepted imperfect clears still count against metrics and score.
+- Browser playtest: the room timer now counts down visibly and auto-times out into the next room, burning 1 HP.
 
 ### Open questions / future tuning
 
@@ -72,6 +73,7 @@ Score distribution (100 seeds, 5 rounds each):
 - Perfect-strike window is the closed interval [320, 440] (±60ms inclusive).
 - Replay determinism: same seed + same timings produces byte-identical events.
 - Nerve-break paths both fire (held past max, never-pressed past max).
+- Browser playtest: holding Space during lead-in no longer resolves as a false danger loss; full 5-round keyboard match can advance via the next-round button.
 
 ### Open questions / future tuning
 

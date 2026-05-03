@@ -10,10 +10,12 @@ export const game: GameModule = {
     let raf = 0;
     let submitted = false;
     let isHolding = false;
+    let lastRenderKey = "";
 
     const handlers = {
       onActionDown() {
         if (obs.isOver()) return;
+        if (obs.snapshot().phase !== "active") return;
         if (!isHolding) {
           isHolding = true;
           obs.press();
@@ -35,7 +37,25 @@ export const game: GameModule = {
 
     function loop() {
       obs.tick();
-      render(root, obs.snapshot(), handlers);
+      const snap = obs.snapshot();
+      const renderKey =
+        snap.phase === "active"
+          ? ""
+          : [
+              snap.phase,
+              snap.round,
+              snap.metrics.wins,
+              snap.metrics.losses,
+              snap.metrics.perfectStrikes,
+              snap.metrics.counters,
+              snap.lastClash?.outcome ?? "",
+              snap.lastClash?.player ?? "",
+              snap.lastClash?.bot ?? "",
+            ].join(":");
+      if (snap.phase === "active" || renderKey !== lastRenderKey) {
+        render(root, snap, handlers);
+        lastRenderKey = renderKey;
+      }
       if (!obs.isOver()) raf = requestAnimationFrame(loop);
     }
 

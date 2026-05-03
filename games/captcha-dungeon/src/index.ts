@@ -23,6 +23,7 @@ export const game: GameModule = {
     const dungeon = new CaptchaDungeon({ seed: runtime.run.seed });
     let focusIndex = 0;
     let raf = 0;
+    let timer = 0;
     let submitted = false;
 
     const handlers = {
@@ -52,6 +53,13 @@ export const game: GameModule = {
       raf = requestAnimationFrame(() =>
         render(root, dungeon, dungeon.snapshot(), focusIndex, handlers),
       );
+    }
+
+    function tick() {
+      if (dungeon.isOver()) return;
+      dungeon.tick();
+      scheduleRender();
+      if (dungeon.isOver()) finish();
     }
 
     function onKeyDown(e: KeyboardEvent) {
@@ -110,12 +118,14 @@ export const game: GameModule = {
     return {
       start() {
         window.addEventListener("keydown", onKeyDown);
+        timer = window.setInterval(tick, 250);
         scheduleRender();
       },
       pause() {},
       resume() {},
       destroy() {
         cancelAnimationFrame(raf);
+        window.clearInterval(timer);
         window.removeEventListener("keydown", onKeyDown);
         root.innerHTML = "";
       },

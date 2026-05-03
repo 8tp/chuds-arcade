@@ -35,6 +35,7 @@ const STYLE = `
 .obs-actions { display: flex; gap: 0.5rem; }
 .obs-btn { font-family: var(--font-mono, monospace); font-size: 0.75rem; text-transform: uppercase; padding: 0.55rem 0.85rem; border: 1px solid var(--color-border, #151515); background: var(--color-panel, #fffdf7); cursor: pointer; }
 .obs-btn-primary { background: var(--color-fg); color: var(--color-panel); }
+.obs-btn:disabled { cursor: not-allowed; background: var(--color-elev, #f7f4ed); color: var(--color-fg-muted, #565656); }
 .obs-result { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; text-transform: uppercase; }
 .obs-result.win { color: var(--color-fg); }
 .obs-result.loss { color: var(--color-fg-dim); }
@@ -142,7 +143,9 @@ export function render(root: HTMLElement, snap: GameSnapshot, handlers: RenderHa
         ${
           isResolved
             ? `<button class="obs-btn obs-btn-primary" data-act="next" type="button">next round →</button>`
-            : `<button class="obs-btn obs-btn-primary" data-act="strike" type="button">press &amp; hold (space)</button>`
+            : isLeadIn
+              ? `<button class="obs-btn obs-btn-primary" type="button" disabled>wait for draw</button>`
+              : `<button class="obs-btn obs-btn-primary" data-act="strike" type="button">press &amp; hold (space)</button>`
         }
       </div>
     </div>

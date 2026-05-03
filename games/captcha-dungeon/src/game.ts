@@ -24,6 +24,8 @@ export type GameSnapshot = {
   mistakes: number;
   startedAtMs: number;
   elapsedMs: number;
+  roomElapsedMs: number;
+  roomRemainingMs: number;
   currentRoom: Room | null;
   selectedTileIds: string[];
   lastResult: { correct: boolean; perfect: boolean; mistakes: number; missed: number } | null;
@@ -51,11 +53,13 @@ export class CaptchaDungeon {
   private status: GameStatus = "playing";
   private selected = new Set<string>();
   private lastResult: GameSnapshot["lastResult"] = null;
+  private roomStartedAt: number;
 
   constructor(opts: GameOptions) {
     this.dungeon = generateDungeon(opts.seed);
     this.now = opts.now ?? (() => Date.now());
     this.startedAt = this.now();
+    this.roomStartedAt = this.startedAt;
   }
 
   get totalRooms(): number {
@@ -82,6 +86,16 @@ export class CaptchaDungeon {
 
   isTileSelected(id: string): boolean {
     return this.selected.has(id);
+  }
+
+  /** Advance time-driven state. Caller invokes on an interval or frame. */
+  tick(): void {
+    if (this.status !== "playing") return;
+    const room = this.currentRoom();
+    if (!room) return;
+    if (this.now() - this.roomStartedAt >= room.puzzle.timeLimitMs) {
+      this.timeoutRoom();
+    }
   }
 
   /** Submit the current selection and advance. Returns whether the room was cleared. */
@@ -146,7 +160,9 @@ export class CaptchaDungeon {
     if (this.idx >= this.dungeon.rooms.length) {
       this.status = "victory";
       this.endedAt = this.now();
+      return;
     }
+    this.roomStartedAt = this.now();
   }
 
   metrics(): RunMetrics {
@@ -169,6 +185,11 @@ export class CaptchaDungeon {
   }
 
   snapshot(): GameSnapshot {
+    const room = this.currentRoom();
+    const roomElapsedMs =
+      this.status === "playing" && room ? Math.max(0, this.now() - this.roomStartedAt) : 0;
+    const roomRemainingMs =
+      this.status === "playing" && room ? Math.max(0, room.puzzle.timeLimitMs - roomElapsedMs) : 0;
     return {
       status: this.status,
       roomIndex: Math.min(this.idx, this.dungeon.rooms.length - 1),
@@ -181,7 +202,9 @@ export class CaptchaDungeon {
       mistakes: this.mistakes,
       startedAtMs: this.startedAt,
       elapsedMs: (this.endedAt ?? this.now()) - this.startedAt,
-      currentRoom: this.currentRoom(),
+      roomElapsedMs,
+      roomRemainingMs,
+      currentRoom: room,
       selectedTileIds: Array.from(this.selected),
       lastResult: this.lastResult,
     };

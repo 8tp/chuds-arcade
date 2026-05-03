@@ -63,4 +63,20 @@ describe("CaptchaDungeon", () => {
     expect(g.snapshot().health).toBe(startHealth);
     expect(g.metrics().mistakes).toBe(1);
   });
+
+  it("auto-times out a room when the timer expires", () => {
+    let now = 0;
+    const g = new CaptchaDungeon({ seed: SEED, now: () => now });
+    const firstRoom = g.currentRoom()!;
+    now = firstRoom.puzzle.timeLimitMs - 1;
+    g.tick();
+    expect(g.snapshot().roomIndex).toBe(0);
+    expect(g.metrics().timeouts).toBe(0);
+
+    now += 1;
+    g.tick();
+    expect(g.snapshot().roomIndex).toBe(1);
+    expect(g.metrics().timeouts).toBe(1);
+    expect(g.snapshot().health).toBe(STARTING_HEALTH - 1);
+  });
 });

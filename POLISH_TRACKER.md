@@ -2,7 +2,7 @@
 
 > One change per iteration. The polish loop reads this, picks the highest-value `[ ]`, does it, marks `[x]`, commits.
 
-## Gates (last verified: 2026-05-03T04:36:51-05:00)
+## Gates (last verified: 2026-05-03T04:54:31-05:00)
 - typecheck: __green__
 - tests: __53 passing__
 - lint: __0 errors__
@@ -35,14 +35,21 @@
 
 ## Game polish — Captcha Dungeon
 - [x] Restrict room 1 to difficulty-1 templates only (playtest finding)
-- [ ] Auto-timeout enforcement when room timer expires (currently skip-only)
+- [x] Auto-timeout enforcement when room timer expires
 - [x] Revisit Average archetype pacing after room-1 restriction; Average now reaches mini-boss in 32/50 runs
 
 ## Game polish — One Button Samurai
 - [x] Re-run playtest matrix after the bot rebalance; commit numbers to PLAYTEST_NOTES.md
 - [x] Tighten guard window to [651, 1100] if guard-dominance persists
+- [x] Fix lead-in input so early holds cannot resolve as false danger losses
+- [x] Stabilize resolved-round rendering so next-round clicks do not detach under browser play
 - [ ] Add a noisy-human player model (release +/- 30ms jitter)
 - [ ] Guard-at-1000 remains the highest static score strategy; consider score or bot-mix tuning after manual play
+
+## Browser playtest
+- [x] Headless desktop/mobile smoke for all four `/play/[slug]` pages with no horizontal overflow at 360px
+- [x] Headless Captcha Dungeon: completed 3 rooms from visible prompts; timer 18s -> 17s and auto-timeout to room 2 with 1 HP loss
+- [x] Headless One Button Samurai: lead-in hold regression fixed; completed a 5-round keyboard match
 
 ## Worker hardening
 - [ ] Regex-based origin allowlist for preview deploys
@@ -53,6 +60,7 @@
 
 ## Done log
 - 11f502d · Captcha Dungeon opening-room and validation pacing polish; Samurai guard-window tightening; polished Synth Runner and Cursor Wars preview panels
+- local · Captcha auto-timeout/countdown, mobile grid fit, Samurai lead-in and stable next-round browser fixes
 
 ## Blocked
 (nothing yet)
