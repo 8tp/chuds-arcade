@@ -1,0 +1,6 @@
+-- Canonical schema lives in db/migrations/.
+-- Apply latest:
+--   wrangler d1 migrations apply chuds-arcade --local
+--   wrangler d1 migrations apply chuds-arcade
+--
+-- Use `wrangler d1 migrations create chuds-arcade <name>` for new ones.

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "types": ["@cloudflare/workers-types"],
+    "lib": ["ES2022", "DOM"],
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "paths": {
+      "@chuds/arcade-sdk": ["../../packages/arcade-sdk/src/index.ts"],
+      "@chuds/arcade-sdk/*": ["../../packages/arcade-sdk/src/*"]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+name = "chuds-arcade-api"
+main = "src/index.ts"
+compatibility_date = "2026-05-03"
+
+# Migrations live at the repo root.
+[[d1_databases]]
+binding = "DB"
+database_name = "chuds-arcade"
+database_id = "REPLACE_WITH_D1_ID"
+migrations_dir = "../../db/migrations"
+
+# Replays are uploaded as opaque blobs. Bucket created with:
+#   wrangler r2 bucket create chuds-arcade-replays
+[[r2_buckets]]
+binding = "REPLAYS"
+bucket_name = "chuds-arcade-replays"
+
+# Hourly cleanup of expired pending_runs.
+[triggers]
+crons = ["17 * * * *"]
+
+# Set with: wrangler secret put RUN_NONCE_SECRET
+# Set with: wrangler secret put GUEST_TOKEN_SECRET
+[vars]
+ALLOWED_ORIGIN = "http://localhost:4321"

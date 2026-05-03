@@ -1,0 +1,25 @@
+{
+  "name": "@chuds/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "lint": "biome check src",
+    "db:apply:local": "wrangler d1 migrations apply chuds-arcade --local",
+    "db:apply": "wrangler d1 migrations apply chuds-arcade"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "@chuds/arcade-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0",
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}
