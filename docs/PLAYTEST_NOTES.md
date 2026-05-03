@@ -86,6 +86,46 @@ Score distribution (100 seeds, 5 rounds each):
 ```bash
 pnpm --filter @chuds/game-captcha-dungeon test
 pnpm --filter @chuds/game-one-button-samurai test
+pnpm --filter @chuds/game-synth-runner test
+pnpm --filter @chuds/game-cursor-wars test
 ```
 
 The playtest suites print histograms and matrices to stdout — copy them here when balance numbers change.
+
+## Synth Runner
+
+### Implemented prototype
+
+- Deterministic daily song seed and chart generation.
+- Three-lane runner simulation with jump, slide, shift, gap, and gem events.
+- Timing judgments use the spec windows: Perfect ±45ms, Great ±90ms, Okay ±140ms.
+- Canvas renderer uses a monochrome perspective grid, runner silhouette, beat tiles, waveform strip, and explicit `NOW` timing cue.
+- Keyboard controls: A/Left, D/Right, Space/Up, Shift/Down. Touch buttons and swipe surface are wired through the same input path.
+
+### Browser playtest
+
+- Desktop and 360px mobile pages render nonblank canvas content with no horizontal overflow.
+- Guided headless run using the visible `NOW` cue reached `TRACK CLEAR` with 28 combo, 100% accuracy, and score 3,733 on the current daily seed.
+
+### Open questions / future tuning
+
+- Add procedural Web Audio once the visual timing lane is stable.
+- Add a latency calibration setting before ranked leaderboard tuning.
+
+## Cursor Wars
+
+### Implemented prototype
+
+- Deterministic Daily Bot Arena simulation with target-based cursor physics, pixels, hazards, dash, trails, and three bot archetypes.
+- Mouse/touch input sets a target; click/Space triggers dash.
+- Canvas renderer uses a monochrome OS/grid arena with cursor markers, dotted trails, square pixels, and dashed hazards.
+
+### Browser playtest
+
+- Desktop and 360px mobile pages render nonblank canvas content with no horizontal overflow.
+- Headless steering/dash smoke run survived several target changes, collected 1 pixel, and retained 4/5 health after contact damage.
+
+### Open questions / future tuning
+
+- Bot damage and pickup rates need a longer playtest matrix.
+- Add explicit target reticle affordance and dash cooldown readout.

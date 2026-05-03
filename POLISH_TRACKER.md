@@ -46,10 +46,30 @@
 - [ ] Add a noisy-human player model (release +/- 30ms jitter)
 - [ ] Guard-at-1000 remains the highest static score strategy; consider score or bot-mix tuning after manual play
 
+## Game prototype — Synth Runner
+- [x] Seeded daily song + chart generator
+- [x] Lane runner simulation, timing judgments, scoring, and tests
+- [x] Monochrome canvas renderer with perspective grid, beat tiles, runner silhouette, waveform, and `NOW` cue
+- [x] Keyboard/touch input and run submission
+- [x] Headless browser playtest reaches `TRACK CLEAR` on guided run
+- [ ] Add procedural audio metronome after visual timing is stable
+- [ ] Add latency calibration before ranked tuning
+
+## Game prototype — Cursor Wars
+- [x] Deterministic Daily Bot Arena simulation with target-based physics, pixels, hazards, dash, trails, and bots
+- [x] Scoring/tests for pickups, survival, combo, eliminations, and damage
+- [x] Monochrome canvas renderer with OS/grid arena, cursor markers, trails, pixels, and hazards
+- [x] Mouse/touch target steering, click/Space dash, and run submission
+- [x] Headless browser steering smoke survives, collects pixels, and avoids horizontal overflow
+- [ ] Add longer bot arena playtest matrix for damage/pickup tuning
+- [ ] Add target reticle affordance and dash cooldown readout
+
 ## Browser playtest
 - [x] Headless desktop/mobile smoke for all four `/play/[slug]` pages with no horizontal overflow at 360px
 - [x] Headless Captcha Dungeon: completed 3 rooms from visible prompts; timer 18s -> 17s and auto-timeout to room 2 with 1 HP loss
 - [x] Headless One Button Samurai: lead-in hold regression fixed; completed a 5-round keyboard match
+- [x] Headless Synth Runner: guided `NOW` cue run reached track clear
+- [x] Headless Cursor Wars: steering/dash smoke collected pixels and survived contact damage
 
 ## Worker hardening
 - [ ] Regex-based origin allowlist for preview deploys
@@ -61,6 +81,7 @@
 ## Done log
 - 11f502d · Captcha Dungeon opening-room and validation pacing polish; Samurai guard-window tightening; polished Synth Runner and Cursor Wars preview panels
 - local · Captcha auto-timeout/countdown, mobile grid fit, Samurai lead-in and stable next-round browser fixes
+- local · Synth Runner playable canvas prototype; Cursor Wars playable bot-arena prototype
 
 ## Blocked
 (nothing yet)
