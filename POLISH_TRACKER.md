@@ -81,7 +81,7 @@
 ## Done log
 - 11f502d · Captcha Dungeon opening-room and validation pacing polish; Samurai guard-window tightening; polished Synth Runner and Cursor Wars preview panels
 - local · Captcha auto-timeout/countdown, mobile grid fit, Samurai lead-in and stable next-round browser fixes
-- local · Synth Runner playable canvas prototype; Cursor Wars playable bot-arena prototype
+- 29f2b99 · Synth Runner playable canvas prototype; Cursor Wars playable bot-arena prototype
 
 ## Blocked
 (nothing yet)
