@@ -2,11 +2,12 @@
 
 > One change per iteration. The polish loop reads this, picks the highest-value `[ ]`, does it, marks `[x]`, commits.
 
-## Gates (last verified: 2026-05-03T04:35:40-05:00)
+## Gates (last verified: 2026-05-03T04:36:51-05:00)
 - typecheck: __green__
 - tests: __53 passing__
 - lint: __0 errors__
 - build: __14 pages__, largest client chunk __30.77 KB__
+- ci: __green__ (`25275614247`)
 
 ## Visual fidelity
 - [ ] Right-rail composition on homepage matching `assets/mockups/homepage.png` (profile + leaderboard + achievements stack)
@@ -51,7 +52,7 @@
 - [ ] Architecture diagram in `docs/ARCHITECTURE.md` upgraded to a real SVG
 
 ## Done log
-- local · Captcha Dungeon opening-room and validation pacing polish; Samurai guard-window tightening; polished Synth Runner and Cursor Wars preview panels
+- 11f502d · Captcha Dungeon opening-room and validation pacing polish; Samurai guard-window tightening; polished Synth Runner and Cursor Wars preview panels
 
 ## Blocked
 (nothing yet)
