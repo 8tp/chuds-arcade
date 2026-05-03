@@ -1,0 +1,21 @@
+---
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+---
+<ArcadeLayout title="404 // Chuds Arcade">
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// 404</span></span>
+      <span class="right">page not found</span>
+    </header>
+    <div class="win-body" style="text-align: center;">
+      <p class="mono-tag">// missing from issue</p>
+      <h1 class="big-num">404</h1>
+      <p class="lede">This page is missing from the issue.</p>
+      <a class="btn btn-primary" href="/">return to homepage →</a>
+    </div>
+  </section>
+</ArcadeLayout>
+
+<style>
+  .big-num { font-family: var(--font-display); font-size: clamp(6rem, 16vw, 14rem); line-height: 0.85; margin: 0.5rem 0; letter-spacing: -0.04em; }
+</style>

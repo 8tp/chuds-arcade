@@ -1,0 +1,16 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*", "src/**/*.astro", "src/**/*.svelte"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@chuds/arcade-sdk": ["../../packages/arcade-sdk/src/index.ts"],
+      "@chuds/arcade-sdk/*": ["../../packages/arcade-sdk/src/*"],
+      "@chuds/replay": ["../../packages/replay/src/index.ts"],
+      "@chuds/deterministic-rng": ["../../packages/deterministic-rng/src/index.ts"],
+      "@chuds/procedural-audio": ["../../packages/procedural-audio/src/index.ts"],
+      "@/*": ["src/*"]
+    }
+  }
+}

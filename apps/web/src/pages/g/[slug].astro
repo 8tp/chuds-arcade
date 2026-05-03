@@ -1,0 +1,79 @@
+---
+import ArcadeLayout from "../../layouts/ArcadeLayout.astro";
+import { gameManifests, getManifest } from "../../lib/games";
+
+export function getStaticPaths() {
+  return gameManifests.map((m) => ({ params: { slug: m.slug } }));
+}
+
+const { slug } = Astro.params;
+const manifest = getManifest(slug!);
+if (!manifest) {
+  return Astro.redirect("/404");
+}
+---
+<ArcadeLayout title={`${manifest.title} // Chuds Arcade`}>
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// {manifest.slug}</span></span>
+      <span class="right">v{manifest.version} · {manifest.rulesetVersion}</span>
+    </header>
+    <div class="win-body detail-grid">
+      <div>
+        <p class="mono-tag">// brief / chapter</p>
+        <h1 class="detail-title">{manifest.title}</h1>
+        <p class="lede">{manifest.tagline}</p>
+        <p>{manifest.description}</p>
+
+        <span class="ascii-rule">— modes —</span>
+        <ul class="modes">
+          {manifest.modes.map((mode) => (
+            <li>
+              <div class="mode-meta">
+                <strong>{mode.label}</strong>
+                <span class="muted"> {mode.description}</span>
+              </div>
+              <a class="btn" href={`/play/${manifest.slug}?mode=${mode.id}${mode.dailyEligible ? "&daily=1" : ""}`}>play {mode.label.toLowerCase()} →</a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="tags">
+          {manifest.tags.map((t) => <span class="pill">{t}</span>)}
+        </div>
+      </div>
+      <div class="detail-thumb screentone" style={`background-image: url(${manifest.thumbnail})`}></div>
+    </div>
+  </section>
+</ArcadeLayout>
+
+<style>
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 760px) { .detail-grid { grid-template-columns: 1fr; } }
+  .detail-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 0.9;
+    margin: 0.2rem 0 0.4rem;
+  }
+  .modes { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; margin: 0.5rem 0 1rem; }
+  .modes li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.6rem 0;
+    border-top: 1px dashed var(--color-gutter);
+  }
+  .modes .btn { align-self: flex-start; }
+  .mode-meta strong { font-family: var(--font-display); font-weight: 900; font-size: 1.05rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 1rem; }
+  .detail-thumb {
+    aspect-ratio: 4 / 3;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1) contrast(1.05);
+    border: 1px solid var(--color-border);
+  }
+  .muted { color: var(--color-fg-muted); }
+</style>

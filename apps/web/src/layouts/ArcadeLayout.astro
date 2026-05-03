@@ -1,0 +1,92 @@
+---
+import "../styles/global.css";
+const { title = "Chuds Arcade", description = "A monochrome manga-zine browser arcade." } =
+  Astro.props;
+const year = new Date().getUTCFullYear();
+---
+<!doctype html>
+<html lang="en" data-theme="manga-ink">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f3f0e8" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;900&display=swap" />
+  </head>
+  <body class="grain">
+    <div class="shell">
+      <header class="masthead">
+        <div class="masthead-bar">
+          <span>
+            <span>chuds_arcade mag</span>
+            <span class="gutter"> · </span>
+            <span>vol. 2026</span>
+            <span class="gutter"> · </span>
+            <span>issue 01</span>
+          </span>
+          <span>
+            <span>basement edition</span>
+            <span class="gutter"> / </span>
+            <span>p. 001</span>
+          </span>
+        </div>
+        <div class="masthead-body">
+          <div>
+            <a class="wordmark" href="/">CHUDS ARCADE</a>
+            <span class="kana">チャッズ・アーケード // playable basement annex</span>
+            <nav class="nav">
+              <a href="/games">// games</a>
+              <a href="/daily">// daily</a>
+              <a href="/leaderboards">// leaderboards</a>
+              <a href="/settings">// settings</a>
+              <a href="https://chuds.dev" target="_blank" rel="noopener">→ chuds.dev</a>
+            </nav>
+          </div>
+          <div class="issue-badge">
+            CHUDS_ARCADE<br />
+            // ISSUE 01<br />
+            <strong>p. 001</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="stack">
+        <slot />
+      </main>
+
+      <footer class="colophon">
+        <div class="colophon-bar">
+          <span>// colophon</span>
+          <span>back cover</span>
+        </div>
+        <div class="colophon-body">
+          <div>
+            <p><span class="muted">$</span> echo "© {year} chuds arcade · manga-ink edition"</p>
+            <p class="muted">set in space grotesk + jetbrains mono. inked, screentoned, and stapled in the basement.</p>
+            <p><a href="https://chuds.dev" target="_blank" rel="noopener">read chuds.dev →</a> &nbsp; <a href="https://github.com/8tp" target="_blank" rel="noopener">github.com/8tp →</a></p>
+          </div>
+          <div>
+            <p class="muted">issn 1208-arcade · vol. 2026</p>
+          </div>
+        </div>
+        <div class="colophon-tools">
+          <a href="https://astro.build" target="_blank" rel="noopener">
+            <span><span class="label">// pressed with</span><span class="name">Astro</span></span>
+            <span class="muted">astro.build →</span>
+          </a>
+          <a href="https://svelte.dev" target="_blank" rel="noopener">
+            <span><span class="label">// inked with</span><span class="name">Svelte</span></span>
+            <span class="muted">svelte.dev →</span>
+          </a>
+          <a href="https://workers.cloudflare.com" target="_blank" rel="noopener">
+            <span><span class="label">// shipped on</span><span class="name">Cloudflare</span></span>
+            <span class="muted">workers.cloudflare.com →</span>
+          </a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

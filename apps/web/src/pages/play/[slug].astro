@@ -1,0 +1,30 @@
+---
+import GameHost from "../../components/GameHost.svelte";
+import ArcadeLayout from "../../layouts/ArcadeLayout.astro";
+import { gameManifests, getManifest } from "../../lib/games";
+
+export function getStaticPaths() {
+  return gameManifests.map((m) => ({ params: { slug: m.slug } }));
+}
+
+const { slug } = Astro.params;
+const manifest = getManifest(slug!);
+if (!manifest) {
+  return Astro.redirect("/404");
+}
+
+const url = new URL(Astro.request.url);
+const mode = url.searchParams.get("mode") ?? undefined;
+const daily = url.searchParams.get("daily") !== "0";
+---
+<ArcadeLayout title={`${manifest.title} // play`}>
+  <section class="win play-panel">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// {manifest.slug}{mode ? ` / ${mode}` : ""}{daily ? " / daily" : ""}</span></span>
+      <a class="right" href={`/g/${manifest.slug}`}>back to brief →</a>
+    </header>
+    <div class="win-body" style="padding: 0;">
+      <GameHost client:only="svelte" slug={manifest.slug} mode={mode} daily={daily} />
+    </div>
+  </section>
+</ArcadeLayout>

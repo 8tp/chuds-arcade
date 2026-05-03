@@ -1,0 +1,43 @@
+---
+import LeaderboardPanel from "../components/LeaderboardPanel.svelte";
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+import { gameManifests } from "../lib/games";
+---
+<ArcadeLayout title="Leaderboards // Chuds Arcade">
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// leaderboards</span></span>
+      <span class="right">local only — server boards land in M2</span>
+    </header>
+    <div class="win-body">
+      <div class="grid cols-2">
+        {gameManifests.map((m) => (
+          <section class="board-card">
+            <header class="board-card-head">
+              <h3>{m.title}</h3>
+              <span class="muted">{m.modes[0]?.label ?? "default"}</span>
+            </header>
+            <LeaderboardPanel client:only="svelte" gameSlug={m.slug} limit={5} />
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+</ArcadeLayout>
+
+<style>
+  .board-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-panel);
+    padding: 0.7rem 0.85rem;
+  }
+  .board-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+  .muted { font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-fg-muted); text-transform: uppercase; }
+</style>

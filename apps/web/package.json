@@ -1,0 +1,32 @@
+{
+  "name": "@chuds/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "typecheck": "astro check",
+    "test": "vitest run --passWithNoTests",
+    "lint": "biome check src"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "@astrojs/svelte": "^7.0.0",
+    "svelte": "^5.0.0",
+    "zod": "^3.23.8",
+    "@chuds/arcade-sdk": "workspace:*",
+    "@chuds/replay": "workspace:*",
+    "@chuds/deterministic-rng": "workspace:*",
+    "@chuds/procedural-audio": "workspace:*",
+    "@chuds/game-captcha-dungeon": "workspace:*",
+    "@chuds/game-one-button-samurai": "workspace:*",
+    "@chuds/game-synth-runner": "workspace:*",
+    "@chuds/game-cursor-wars": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}

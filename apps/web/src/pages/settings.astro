@@ -1,0 +1,19 @@
+---
+import ProfileCard from "../components/ProfileCard.svelte";
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+---
+<ArcadeLayout title="Settings // Chuds Arcade">
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// settings</span></span>
+      <span class="right">local profile</span>
+    </header>
+    <div class="win-body">
+      <h3>Profile</h3>
+      <ProfileCard client:only="svelte" />
+
+      <h3 style="margin-top: 2rem;">Audio &amp; motion</h3>
+      <p class="muted">Settings UI lands in M2. Defaults: audio on, reduced-motion off, latency 0ms.</p>
+    </div>
+  </section>
+</ArcadeLayout>

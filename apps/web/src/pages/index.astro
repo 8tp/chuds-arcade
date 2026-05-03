@@ -1,0 +1,83 @@
+---
+import GameCard from "../components/GameCard.svelte";
+import LeaderboardPanel from "../components/LeaderboardPanel.svelte";
+import ProfileCard from "../components/ProfileCard.svelte";
+import StatStrip from "../components/StatStrip.svelte";
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+import { gameManifests } from "../lib/games";
+import { todayUtc } from "../lib/seed";
+
+const dailyGame = gameManifests[0];
+if (!dailyGame) throw new Error("No game manifests registered");
+const dailyMode = dailyGame.modes[0];
+if (!dailyMode) throw new Error(`Game ${dailyGame.slug} has no modes`);
+const date = todayUtc();
+
+const heroStats = [
+  { label: "// titles", value: String(gameManifests.length) },
+  { label: "// daily seed", value: date },
+  { label: "// resets at", value: "00:00 UTC" },
+  { label: "// edition", value: "Vol. 2026 / Iss. 01" },
+];
+---
+<ArcadeLayout title="Chuds Arcade">
+  <!-- Daily challenge hero -->
+  <section class="win speed-lines">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// daily challenge</span></span>
+      <span class="right">{date} UTC</span>
+    </header>
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="mono-tag">// {dailyGame.slug} / daily-{dailyMode.id}</p>
+        <h1>{dailyGame.title}</h1>
+        <p class="lede">{dailyGame.tagline}</p>
+        <p class="muted">Daily seeds reset at 00:00 UTC. Same dungeon for every player worldwide.</p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+          <a class="btn btn-primary" href={`/play/${dailyGame.slug}?daily=1`}>play daily run →</a>
+          <a class="btn" href={`/g/${dailyGame.slug}`}>read brief</a>
+        </div>
+      </div>
+      <div class="hero-thumb" style={`background-image: url(${dailyGame.thumbnail})`}></div>
+    </div>
+  </section>
+
+  <!-- Top of issue stat strip -->
+  <StatStrip stats={heroStats} />
+
+  <!-- Two-column: profile + recent runs -->
+  <div class="grid cols-2">
+    <section class="win">
+      <header class="win-title">
+        <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// guest profile</span></span>
+        <a class="right" href="/settings">edit →</a>
+      </header>
+      <div class="win-body">
+        <ProfileCard client:only="svelte" />
+      </div>
+    </section>
+    <section class="win">
+      <header class="win-title">
+        <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// recent runs</span></span>
+        <a class="right" href="/leaderboards">all boards →</a>
+      </header>
+      <div class="win-body">
+        <LeaderboardPanel client:only="svelte" limit={5} />
+      </div>
+    </section>
+  </div>
+
+  <!-- Launch games grid -->
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// launch games</span></span>
+      <a class="right" href="/games">directory →</a>
+    </header>
+    <div class="win-body">
+      <span class="ascii-rule">— ep. 01 — ep. 02 — ep. 03 — ep. 04 — ep. 05 — ep. 06 —</span>
+      <div class="grid card-grid">
+        {gameManifests.map((m, i) => <GameCard manifest={m} index={i} />)}
+      </div>
+    </div>
+  </section>
+</ArcadeLayout>

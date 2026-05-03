@@ -1,0 +1,19 @@
+---
+import GameCard from "../components/GameCard.svelte";
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+import { gameManifests } from "../lib/games";
+---
+<ArcadeLayout title="Games // Chuds Arcade">
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// games directory</span></span>
+      <span class="right">{gameManifests.length} titles</span>
+    </header>
+    <div class="win-body">
+      <span class="ascii-rule">— directory — vol. 2026 — issue 01 —</span>
+      <div class="grid card-grid">
+        {gameManifests.map((m, i) => <GameCard manifest={m} index={i} />)}
+      </div>
+    </div>
+  </section>
+</ArcadeLayout>

@@ -1,0 +1,57 @@
+---
+import ArcadeLayout from "../layouts/ArcadeLayout.astro";
+import { gameManifests } from "../lib/games";
+import { dailySeed, todayUtc } from "../lib/seed";
+
+const date = todayUtc();
+const challenges = gameManifests
+  .filter((m) => m.supports.daily && m.modes.length > 0)
+  .map((m) => {
+    const mode = m.modes.find((mo) => mo.dailyEligible) ?? m.modes[0]!;
+    return {
+      manifest: m,
+      mode,
+      seed: dailySeed(m.slug, mode.id, m.rulesetVersion, date),
+    };
+  });
+---
+<ArcadeLayout title="Daily // Chuds Arcade">
+  <section class="win">
+    <header class="win-title">
+      <span class="left"><span class="dots"><span></span><span></span><span></span></span><span>// daily hub</span></span>
+      <span class="right">{date} UTC</span>
+    </header>
+    <div class="win-body">
+      <p class="muted" style="margin-top:0;">Every game runs a deterministic daily challenge. Resets at 00:00 UTC.</p>
+      <span class="ascii-rule">—————————————————————————————————————————————</span>
+      <ul class="daily-list">
+        {challenges.map(({ manifest, mode, seed }, i) => (
+          <li class="daily-row">
+            <div class="daily-meta">
+              <p class="mono-tag">ep. {String(i + 1).padStart(2, "0")} / {mode.label.toLowerCase()}</p>
+              <h3>{manifest.title}</h3>
+              <p class="lede">{manifest.tagline}</p>
+              <code class="seed">{seed}</code>
+            </div>
+            <a class="btn btn-primary" href={`/play/${manifest.slug}?daily=1&mode=${mode.id}`}>play →</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</ArcadeLayout>
+
+<style>
+  .daily-list { list-style: none; margin: 0; padding: 0; }
+  .daily-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px dashed var(--color-gutter);
+  }
+  .daily-row:last-child { border-bottom: none; }
+  .daily-row h3 { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; margin: 0.25rem 0; }
+  .seed { font-family: var(--font-mono); font-size: 0.7rem; color: var(--color-fg-muted); display: inline-block; margin-top: 0.4rem; }
+</style>
