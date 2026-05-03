@@ -1,0 +1,17 @@
+node_modules
+.pnpm-store
+dist
+build
+.astro
+.wrangler
+.dev.vars
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage
+.turbo
+.vite
+.cache
+*.tsbuildinfo
